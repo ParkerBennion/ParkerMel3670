@@ -1,0 +1,57 @@
+//-radius 3 -subdivisionsX20 -axis 0 1 0 -createUVs 2 -constructionHistory 1;
+
+//Body
+polySphere -n Base;
+polySphere -n Middle -r .7;
+move -relative -objectSpace -worldSpaceDistance 0 1 0;
+polySphere -n Head;
+move -relative -objectSpace -worldSpaceDistance 0 1.8 0;
+polySphere -e -radius .3;
+//nose
+polyCone -n Nose -r .2 -height .5;
+move -relative -objectSpace -worldSpaceDistance -.3 1.8 0;
+rotate -relative -objectSpace 0 0 90;
+//eyes
+polyCube -n LeftEye -axis .2 .2 .2 -depth.1 -height.1 -width .1;
+move -relative -objectSpace -worldSpaceDistance -.2 1.9 .15;
+polySoftEdge -angle 0 -ch 1 LeftEye;
+polySmooth;
+polySoftEdge -angle 0 -ch 1 LeftEye;
+polySmooth;
+//button1
+polyCube -n Button1 -axis .2 .2 .2 -depth.1 -height.1 -width .1;
+move -relative -objectSpace -worldSpaceDistance -.7 1 0;
+polySoftEdge -angle 0 -ch 1 LeftEye;
+select -r Button1 ;
+polySmooth;
+//button2
+duplicate -returnRootsOnly;//duplicate comand has alot of function i dont understand and some that i could see being usefull if used in hierarchy.
+move -relative -objectSpace -worldSpaceDistance -.3 -1 0;
+
+polyCube -n RightEye -axis .2 .2 .2 -depth.1 -height.1 -width .1;
+move -relative -objectSpace -worldSpaceDistance -.2 1.9 -.15;
+polySoftEdge -angle 0 -ch 1 RightEye;
+polySmooth;
+polyCube -n LeftArm;
+move -relative -objectSpace -worldSpaceDistance 0 1.1 .7;
+scale -relative .1 .1 .1;
+//move -r 0 0 0.4;
+select -r LeftArm;
+select -r LeftArm.f[0];
+polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -divisions 1 -twist 20 -taper 1 -off 0 -thickness .5 LeftArm.f[0];
+polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -divisions 1 -twist 10 -taper 1 -off 0 -thickness .5 LeftArm.f[0];
+move -relative -objectSpace -worldSpaceDistance .3 .1 0;
+//create and extrude arms
+//this is an edge loop which ive included (and copied from maya) to see the complexity. it does not seem to be practical and am wodering how this would be approached for code.
+delete `polyMoveVertex -ch 1 |LeftArm|LeftArmShape.vtx[0]`; polySplit -ch 1 -sma 180 -ep 0 0.571102 -ep 3 0.571102 -ep 2 0.571102 -ep 1 0.571102 -ep 18 0.571102 -ep 26 0.571102 -ep 22 0.571102 -ep 14 0.571102 -ep 0 0.571102 |LeftArm|LeftArmShape;  select -cl;
+select -r LeftArm ;
+select -r LeftArm.f[19] ;
+polyMirrorFace  -cutMesh 1 -axis 2 -axisDirection 1 -mirrorAxis 2 -mirrorPosition 0 -ch 1 LeftArm;
+
+polyExtrudeFacet -constructionHistory 1 -keepFacesTogether 1 -divisions 1 -twist 20 -taper 1 -off 0 -thickness .1 LeftArm.f[0];
+//hat
+polyCylinder -r .2 -subdivisionsHeight 30;
+move -r 0 2.93 0;
+select -r pCylinder1.f[0:19];
+scale -r -pivot -2.23517e-08cm 1.833333cm -2.98023e-08cm 1.940202 1.940202 1.940202 ;
+//pivot seems to be impractical to find withought already knowing what it is from modeling.
