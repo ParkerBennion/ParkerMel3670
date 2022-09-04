@@ -1,0 +1,65 @@
+//please only modify the $Dimensions and $Height;
+
+
+string $Cata[];
+//all blocks contained in this string
+float $Dimensions[] = {4.0,3.0,4.0};
+//dimension of each level (all levels same dimension)
+float $Height =5;
+//how tall to make building
+string $Empty[];
+//clearing the string to prep for next loop
+int $foundation = 0;
+//bool to place foundation
+int $CubeNumber = 2;
+//this is a 2 to ensure that foundation is skipped when reading the array Cata. it also skipts all the odds as they are not polygons;
+
+
+
+
+
+//this is how i got there;
+/*
+$Cata = `polyCube -n Foundation -w $Dimensions[0] -h $Dimensions[1] -d $Dimensions[2] -sw 1 -sy 1 -sz 1`;
+string $temp[] =`polyCube -n secondStory -w $Dimensions[0] -h $Dimensions[1] -d $Dimensions[2] -sw 1 -sy 1 -sz 1`;
+
+$Cata[size($Cata)] = $temp[0]; 
+//i had to look this up. i crashed maya a dozen times trying to get it to work. it seems maya doesnt like to add more 
+//than one variable to an array at once this way to only adds one. this makes your array odd howerver
+// as 0&1 are shape one and its settings and 2 is only the shape.
+
+$Cata[size($Cata)] = $temp[1]; 
+//this adds its partner
+
+print($Cata);
+move -r 0 ($Dimensions[1]/2) 0 $Cata[0];
+
+move -r 0 (($Dimensions[1]/2)+$Dimensions[1]) 0 $Cata[2];
+*/
+
+
+
+
+//this is my final code
+for ($forVariable=0; $forVariable<($Height)-1; $forVariable++)
+{
+    if ($foundation == 0)
+    {
+        $Cata = `polyCube -n Foundation -w $Dimensions[0] -h $Dimensions[1] -d $Dimensions[2] -sw 1 -sy 1 -sz 1`;
+        move -r 0 ($Dimensions[1]/2) 0 $Cata[0];
+        $foundation = 1;
+    }
+
+    if ($Height>1)
+    {
+        string $temp[] =`polyCube -n Story2 -w $Dimensions[0] -h $Dimensions[1] -d $Dimensions[2] -sw 1 -sy 1 -sz 1`;
+        $Cata[size($Cata)] = $temp[0]; 
+        $Cata[size($Cata)] = $temp[1]; 
+        move -r 0 (($Dimensions[1]/2)+($Dimensions[1]*($forVariable+1))) 0 $Cata[$CubeNumber];
+        $temp = $Empty;
+        $CubeNumber+=2;
+    }
+}
+//forloop was hard to get to work. crashed maya maybe 30 times before i got the syntax right
+
+print($Cata);
