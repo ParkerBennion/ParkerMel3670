@@ -1,0 +1,33 @@
+proc BuildStaricase(int $numberOfSteps, float$offset, int $boolSpacer, int $boolAngleSteps, float $spacerDimensions, float $Rotaton, float $Offset, float $stepLength, float $stepWidth, float $stepHeight)
+{
+    polyCube -n Step -d $stepLength -w $stepWidth -h $stepHeight;
+
+//Angles steps to make seemless
+if($boolAngleSteps)
+{
+    select -r Step.f[0];
+    rotate -p 0 0 ($stepLength/2) 0 ($Rotaton/2) 0;
+    select -r Step;
+    select -r Step.f[2];
+    rotate -p 0 0 (($stepLength/2)*-1) 0 (($Rotaton/2)*-1) 0;
+    select -r Step;
+}
+//set offset for next stair and preps for duplicatoin
+duplicate;
+//translate
+move -r 0 $stepHeight $stepLength;
+//Rotation offset and amount
+rotate -os -p 0 0 $Offset 0 $Rotaton 0;
+//GapOnStairts?
+if ($boolSpacer)
+{
+    move -r 0 $spacerDimensions;
+}
+//number of steps to make
+for ($i=0; $i < ($numberOfSteps)-2; $i++)
+{
+    duplicate -smartTransform;
+}
+}
+
+BuildStaricase(20, 4, 1, 1, 2,30, 2, 4, 6, 1);
