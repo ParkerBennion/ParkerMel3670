@@ -1,0 +1,116 @@
+global proc Calculate(string $operation, float $input[])
+{
+    if ($operation == "+")
+    {
+        print(floatArrayToString($input, " + ")+ " = " + Add($input));
+    }
+    else if ($operation == "-")
+    {
+        print(floatArrayToString($input, " - ")+ " = " + Subtract($input));
+    }
+    else if ($operation == "/")
+    {
+        print(floatArrayToString($input, " / ")+ " = " + Divide($input));
+    }
+    else if ($operation == "*")
+    {
+        print(floatArrayToString($input, " * ")+ " = " + Mult($input));
+    }
+    else if ($operation == "^")
+    {
+        if (size($input)==2)
+        {
+            print(floatArrayToString($input, " ^ ") + " = " + Power($input));
+        }
+        else
+        {
+            print("only 2 args are allowed");
+        }
+    }
+    else if ($operation == "mean")
+    {
+        print("mean of " + floatArrayToString($input, " , ")+ " is " + Mean($input));
+
+    }
+    else if ($operation == "median")
+    {
+        print("median of " + floatArrayToString($input, " , ") + " is " + Median($input));
+    }
+    else
+    {
+        print("valid commands are +, -, /, ^, *, mean, and median. be sure to put string it in quotes");
+    }
+}
+
+
+global proc float Add(float $input[])
+{
+    float $addedVariable = $input[0];
+    for ($i=0; $i<(size($input)-1); $i++)
+    {
+        $addedVariable += $input[$i+1];
+    }
+    return $addedVariable;
+}
+global proc float Subtract(float $input[])
+{
+    float $subtractedVariable = $input[0];
+    for ($i=0; $i<(size($input)-1); $i++)
+    {
+        $subtractedVariable -= $input[$i+1];
+    }
+    return $subtractedVariable;
+}
+global proc float Divide(float $input[])
+{
+    float $divVariable = $input[0];
+    for ($i=0; $i<(size($input)-1); $i++)
+    {
+        $divVariable /= $input[$i+1];
+    }
+    return $divVariable;
+}
+global proc float Mult(float $input[])
+{
+    float $multVariable = $input[0];
+    for ($i=0; $i<(size($input)-1); $i++)
+    {
+        $multVariable *= $input[$i+1];
+    }
+    return $multVariable;
+}
+global proc float Power(float $input[])
+{
+    float $result = pow($input[0],$input[1]);
+    return $result;
+}
+global proc float Mean(float $input[])
+{
+    float $meanVariable = $input[0];
+    for ($i=0; $i<(size($input)-1); $i++)
+    {
+        $meanVariable += $input[$i+1];
+    }
+    float $mean = $meanVariable /= size($input);
+    return $mean;
+}
+global proc float Median(float $input[])
+{
+    float $inputSort[];
+    $inputSort = `sort $input`;
+    if (size($inputSort)%2 == 0)
+    {
+        float $avgOfMedian;
+        $avgOfMedian = $inputSort[(size($inputSort)/2)];
+        $avgOfMedianHigh = $inputSort[((size($inputSort)-1)/2)];
+        $avgOfMedianHigh += $avgOfMedian;
+        float $total = $avgOfMedianHigh/2;
+        return $total;
+    }
+    else
+    {
+        return $inputSort[(size($input)/2)];
+    }
+}
+
+Calculate("median", {1,2,30,40,100,200});
