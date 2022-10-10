@@ -1,0 +1,58 @@
+string $mCalWindow = "calcWindowUI";
+//makes string
+
+if (`window -exists $mCalWindow`)
+{
+    deleteUI $mCalWindow;
+} 
+//looks for window with this string name and deletes it
+$mCalWindow = `window -title "Calculator"
+                      -widthHeight 100 100
+                      -resizeToFitChildren 1
+                      $mCalWindow`;
+// creates window with name of the string variable $calwindow
+string $mTopFormat = `columnLayout -adjustableColumn 1`;
+optionVar -stringValue "textField" `textField -placeholderText "EnterValues"`;
+//floatField "InputWindow";//
+string $mFormatWrap = `gridLayout -numberOfColumns 3
+                                    -numberOfRows 4
+                                    -cw 40
+                                    -ch 40
+                                    -allowEmptyCells 0`;
+button -label ("+") -command ("PrintSomethingDumb(1)");
+button -label ("-") -command ("PrintSomethingDumb(2)");
+button -label ("*") -command ("PrintSomethingDumb(3)");
+button -label ("/") -command ("PrintSomethingDumb(4)");
+button -label ("^") -command ("PrintSomethingDumb(5)");
+button -label ("mean")-command ("PrintSomethingDumb(6)") -bgc .5 .5 .5;
+button -label ("mode") -command ("PrintSomethingDumb(7)") -bgc .5 .5 .5;
+//makes buttons
+optionVar -stringValue "textFieldOutput" `textField -placeholderText "Result"  -p $mTopFormat -ed 0`;
+//floatField -ed 0 -p $mTopFormat -nbg 1 "OutputWindow";//
+//makes output field
+showWindow;
+
+
+global proc PrintSomethingDumb(int $operative)
+{
+    string $inputArray[];
+    float $testFloat[];
+    
+
+    //stores the output field
+        string $Result = `optionVar -q "textFieldOutput"`;
+        //stores the input field
+        string $tempField = `optionVar -q "textField"`;
+        //queries the text in the input field
+        string $tempString = `textField -q -text $tempField`;
+        //changes the output field to match input field
+        
+        $inputArray = stringToStringArray($tempString, " ,");
+
+    for ($i=0; $i<(size($inputArray)); $i++)
+    {
+        $testFloat[$i]=$inputArray[$i];
+    }
+
+    textField -e -text (Calculate($operative, $testFloat)) $Result;
+}
