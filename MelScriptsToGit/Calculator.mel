@@ -138,8 +138,9 @@ global proc float Median(float $input[])
     }
 }
 
-
-string $mCalWindow = "calcWindowUI";
+global proc CalculatorUI()
+{
+    string $mCalWindow = "calcWindowUI";
 //makes string
 
 if (`window -exists $mCalWindow`)
@@ -172,8 +173,7 @@ optionVar -stringValue "textFieldOutput" `textField -placeholderText "Result"  -
 //floatField -ed 0 -p $mTopFormat -nbg 1 "OutputWindow";//
 //makes output field
 showWindow;
-
-
+}
 global proc PrintSomethingDumb(int $operative)
 {
     string $inputArray[];
@@ -198,5 +198,10 @@ global proc PrintSomethingDumb(int $operative)
     textField -e -text (Calculate($operative, $testFloat)) $Result;
 }
 
+
+
 // input numbers separated by spaces or commas
-// press the operatoin you wish to use
+// press the operatoin you wish to use5 
+
+////CalculatorUI
+//^^^to call the ui^^^
