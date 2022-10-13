@@ -1,0 +1,96 @@
+global proc RandomPlacerUI()
+{string $placementWindow = "placeRandomWindow";
+
+if (`window -exists $placementWindow`)
+{
+    deleteUI $placementWindow;
+} 
+
+$placementWindow = `window -title "Random Placement"
+                      -widthHeight 100 400
+                      -resizeToFitChildren 1
+                      $placementWindow`;
+
+string $mTopFormat = `columnLayout -adjustableColumn 1`;
+
+string $mFormatWrapSmall = `gridLayout -numberOfColumns 2
+                                    -numberOfRows 2
+                                    -cw 120
+                                    -ch 20
+                                    -p $mTopFormat
+                                    -allowEmptyCells 0`;
+
+textField -placeholderText "Amount To Copy" -ed 0;
+optionVar -stringValue "Amnt" `intField`;
+textField -placeholderText "Origin Cordinates" -ed 0;
+optionVar -stringValue "oCord" `textField -placeholderText "X,Y,Z"`;
+
+string $mFormatWrap = `gridLayout -numberOfColumns 3
+                                    -numberOfRows 3
+                                    -cw 80
+                                    -ch 40
+                                    -p $mTopFormat
+                                    -allowEmptyCells 0`;
+
+textField -placeholderText "XMin/XMax" -ed 0;
+textField -placeholderText "YMin/YMax" -ed 0;
+textField -placeholderText "ZMin/ZMax" -ed 0;
+optionVar -stringValue "XMin" `floatField`;
+optionVar -stringValue "YMin" `floatField`;
+optionVar -stringValue "ZMin" `floatField`;
+optionVar -stringValue "XMax" `floatField`;
+optionVar -stringValue "YMax" `floatField`;
+optionVar -stringValue "ZMax" `floatField`;
+
+button -label ("Start") -command ("Disperse") -p $mTopFormat;
+
+showWindow;}
+/////////////////////////////////////////////////////////////////////////////
+global proc Disperse()
+{
+    string $inputArray[];
+    float $testFloat[];
+
+    string $Duplinumber = `optionVar -q "Amnt"`;
+    int $numberToDuplicate = `intField -q -value $Duplinumber`;
+
+    string $xMinimum = `optionVar -q "XMin"`;
+    float $xMin = `floatField -q -value $xMinimum`;
+    string $xMaximum = `optionVar -q "XMax"`;
+    float $xMax = `floatField -q -value $xMaximum`;
+    string $yMinimum = `optionVar -q "YMin"`;
+    float $yMin = `floatField -q -value $yMinimum`;
+    string $yMaximum = `optionVar -q "YMax"`;
+    float $yMax = `floatField -q -value $yMaximum`;
+    string $zMinimum = `optionVar -q "ZMin"`;
+    float $zMin = `floatField -q -value $zMinimum`;
+    string $zMaximum = `optionVar -q "ZMax"`;
+    float $zMax = `floatField -q -value $zMaximum`;
+
+    string $tempField = `optionVar -q "oCord"`;
+    string $tempString = `textField -q -text $tempField`;
+    $inputArray = stringToStringArray($tempString, " ,");
+
+    for ($i=0; $i<(size($inputArray)); $i++)
+    {
+        $testFloat[$i]=$inputArray[$i];
+    }
+
+    for ($i=0; $i<$numberToDuplicate; $i++)
+    {
+        duplicate;
+        move -ws $testFloat[0] $testFloat[1] $testFloat[2];
+        float $xRand = `rand $xMin $xMax`;
+        float $yRand = `rand $yMin $yMax`;
+        float $zRand = `rand $zMin $zMax`;
+        move -r $xRand $yRand $zRand;
+        print($xRand + "/n");
+    }
+    
+}
+
+//RandomPlacerUI
+//select object in scene
+//enter times to copy
+//enter the cordinates you want the copies to be made as vector 3 0,0,0
+//enter the tolerance for variation in x,y,z minimum and maximum fields. be sure the minimum is < maximum.
