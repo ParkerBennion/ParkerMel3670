@@ -55,3 +55,4 @@ cmds.move(0, 2.93, 0, r=True)
 # cmds.select (r=True, pCylinder=1.f[0:19])
 # cmds.scale (1.940202, 1.940202, 1.940202, r=True, pivot=(2.23517e08cm, 1.833333cm, 2.98023e08cm))
 # pivot seems to be impractical to find withought already knowing what it is from modeling.
+
