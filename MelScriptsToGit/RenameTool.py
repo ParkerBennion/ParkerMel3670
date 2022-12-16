@@ -1,6 +1,5 @@
 import maya.cmds as cmds
 
-
 def RenameSet(StingTemplate):
     sels = cmds.ls(selection=True)
     number = 1
